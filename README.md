@@ -1,6 +1,6 @@
 # 范哲齐-25361077-第二次人工智能编程作业
 
-仓库链接: 请上传到 GitHub/Gitee 公开仓库后替换为实际链接
+仓库链接: https://github.com/z7-FSE/fanzhq_Work2.git
 
 ## 项目说明
 
