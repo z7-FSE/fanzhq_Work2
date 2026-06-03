@@ -175,6 +175,4 @@ class ExamSys:
             print("读取已有考场安排表失败，将重新生成安排表。")
             self.generate_exam_arrangement()
 
-
-# 作业要求中有时写 ExamSys，有时写 ExamSystem；这里保留别名方便检查。
 ExamSystem = ExamSys
