@@ -1,5 +1,7 @@
-55b8745 (HEAD -> main) Update local generated outputs and README examples
-bf1fdab (origin/main) Refresh git history after final requirement pass
+6e152fe (HEAD -> main) Show terminal inputs in run result record
+49d09e6 (origin/main) Refresh git history record after local update
+55b8745 Update local generated outputs and README examples
+bf1fdab Refresh git history after final requirement pass
 8d4f734 Clean stale admission ticket files before regeneration
 1f25ce8 Update git history record after polish
 7401813 Polish report wording and add personal code comments
