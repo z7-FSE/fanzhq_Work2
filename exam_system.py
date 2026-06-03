@@ -138,6 +138,11 @@ class ExamSys:
         try:
             if not os.path.exists(ticket_dir):
                 os.mkdir(ticket_dir)
+            else:
+                # 重新生成时先清理旧准考证，避免名单人数变化后留下多余文件。
+                for filename in os.listdir(ticket_dir):
+                    if filename.endswith(".txt"):
+                        os.remove(os.path.join(ticket_dir, filename))
 
             width = len(str(len(self.exam_arrangement)))
             if width < 2:
