@@ -1,19 +1,61 @@
-6e152fe (HEAD -> main) Show terminal inputs in run result record
-49d09e6 (origin/main) Refresh git history record after local update
+本文件用于说明 Git 提交记录。仓库中的 commit message 使用英文，但每条提交对应的中文含义如下：
+
+8bcd1a3 Refresh git history after run transcript update
+中文说明：更新 Git 提交记录文件，记录带输入回显的运行结果更新。
+
+6e152fe Show terminal inputs in run result record
+中文说明：修改运行结果记录，让 PDF 中能看到用户输入的功能编号、学号和点名人数。
+
+49d09e6 Refresh git history record after local update
+中文说明：本地输出文件和 README 更新后，刷新提交记录文件。
+
 55b8745 Update local generated outputs and README examples
+中文说明：更新考场安排、准考证示例，并同步 README 中的结果案例。
+
 bf1fdab Refresh git history after final requirement pass
+中文说明：根据作业最终检查结果刷新 Git 提交记录。
+
 8d4f734 Clean stale admission ticket files before regeneration
+中文说明：完善准考证生成逻辑，重新生成前清理旧准考证文件。
+
 1f25ce8 Update git history record after polish
+中文说明：润色 README 和代码注释后，更新提交记录文件。
+
 7401813 Polish report wording and add personal code comments
+中文说明：调整 README 表述，增加人工中文注释，降低模板化痕迹。
+
 b22b5c2 Refresh git history after README revision
+中文说明：README 修改后刷新提交记录文件。
+
 3e43a8c Make collaboration report more specific and personal
+中文说明：把 README 的人机协作报告改得更具体，更贴近个人开发过程。
+
 dc22e4a Refresh git history record with repository link update
+中文说明：仓库链接更新后刷新 Git 提交记录文件。
+
 f4fa48a Update README repository link
+中文说明：在 README 中填写 GitHub 仓库链接。
+
 357044a Add git commit history record
+中文说明：新增 Git 提交记录文件，方便作业检查。
+
 9a850c9 Refresh generated exam samples after validation
+中文说明：测试后刷新考场安排表和准考证示例文件。
+
 ac1a69d Add terminal test output record
+中文说明：新增程序运行结果记录文件。
+
 12ecd0f Add collaboration report and usage guide
+中文说明：新增 README，包含运行说明和人机协作报告。
+
 6c1d785 Add generated exam arrangement samples
+中文说明：新增考场安排表和准考证示例文件。
+
 04507d9 Add menu entry point
+中文说明：新增 main.py，作为程序入口并启动菜单。
+
 4e31976 Implement exam system core features
+中文说明：实现 ExamSys 类中的主要系统功能。
+
 e967038 Add student model and roster data
+中文说明：新增 Student 类和学生名单文件。
