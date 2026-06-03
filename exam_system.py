@@ -8,6 +8,7 @@ class ExamSys:
     """学生信息与考场管理系统。"""
 
     def __init__(self, data_file="人工智能编程语言学生名单.txt"):
+        # 用程序所在目录拼路径，避免从别的目录运行时找不到名单文件。
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.data_file = os.path.join(self.base_dir, data_file)
         self.students = []
@@ -21,6 +22,7 @@ class ExamSys:
             with open(self.data_file, "r", encoding="utf-8") as file:
                 for line in file:
                     text = line.strip()
+                    # 空行和以 # 开头的说明行不算学生数据。
                     if not text or text.startswith("#"):
                         continue
                     student = self._parse_student_line(text)
@@ -77,6 +79,7 @@ class ExamSys:
         """根据输入学号查询学生。"""
         student_id = input("请输入要查询的学号：").strip()
         for student in self.students:
+            # 逐个比较学号，找到后直接 return，避免后面又打印“未找到”。
             if student.student_id == student_id:
                 student.show_info()
                 return
@@ -86,6 +89,7 @@ class ExamSys:
         """随机抽取不重复学生名单。"""
         try:
             count_text = input("请输入需要点名的学生数量：").strip()
+            # int 转换失败、人数不合理，都会交给下面的 except 统一提示。
             count = int(count_text)
             if count <= 0:
                 raise ValueError("人数必须大于0")
@@ -104,6 +108,7 @@ class ExamSys:
 
     def generate_exam_arrangement(self):
         """随机打乱学生顺序并生成考场安排表。"""
+        # 先复制一份列表再打乱，不改变原始学生名单顺序。
         self.exam_arrangement = self.students[:]
         random.shuffle(self.exam_arrangement)
 
@@ -112,6 +117,7 @@ class ExamSys:
             with open(output_path, "w", encoding="utf-8") as file:
                 seat_no = 1
                 for student in self.exam_arrangement:
+                    # 每行格式按题目要求写成：座位号,姓名,学号。
                     file.write(student.to_arrangement_line(seat_no) + "\n")
                     seat_no += 1
             print("考场安排表已生成：" + output_path)
@@ -120,6 +126,7 @@ class ExamSys:
 
     def generate_admission_tickets(self):
         """根据考场安排为每名学生生成独立准考证文件。"""
+        # 如果用户没有先生成考场安排，这里尝试读取旧文件或自动生成一份。
         if not self.exam_arrangement:
             arrangement_path = os.path.join(self.base_dir, "考场安排表.txt")
             if os.path.exists(arrangement_path):
@@ -138,6 +145,7 @@ class ExamSys:
 
             seat_no = 1
             for student in self.exam_arrangement:
+                # zfill 用来把 1 变成 01，文件名排序时更整齐。
                 filename = str(seat_no).zfill(width) + ".txt"
                 ticket_path = os.path.join(ticket_dir, filename)
                 with open(ticket_path, "w", encoding="utf-8") as file:
