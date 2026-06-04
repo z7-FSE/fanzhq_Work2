@@ -1,5 +1,8 @@
 本文件用于说明 Git 提交记录。仓库中的 commit message 使用英文，但每条提交对应的中文含义如下：
 
+4705de6 根据最新学生名单更新项目数据
+中文说明：将项目名单替换为最新表格名单，更新名单解析逻辑、考场安排表、准考证、README 示例和运行结果记录。
+
 8bcd1a3 Refresh git history after run transcript update
 中文说明：更新 Git 提交记录文件，记录带输入回显的运行结果更新。
 
