@@ -20,14 +20,21 @@ class ExamSys:
         self.students = []
         try:
             with open(self.data_file, "r", encoding="utf-8") as file:
-                for line in file:
+                for line_no, line in enumerate(file, start=1):
                     text = line.strip()
                     # 空行和以 # 开头的说明行不算学生数据。
                     if not text or text.startswith("#"):
                         continue
+                    first_part = text.split(",", 1)[0].strip()
+                    if first_part and first_part.split()[0] == "序号":
+                        continue
                     student = self._parse_student_line(text)
                     if student is not None:
                         self.students.append(student)
+                    else:
+                        print("第" + str(line_no) + "行学生信息格式不完整，已跳过。")
+            if not self.students:
+                print("学生名单为空或格式不正确，请检查名单文件。")
         except FileNotFoundError:
             print("学生名单文件不存在，请检查文件是否放在程序根目录。")
         except OSError:
@@ -36,7 +43,7 @@ class ExamSys:
     def _parse_student_line(self, text):
         """把一行名单文本转换为 Student 对象。"""
         if "," in text:
-            parts = text.split(",")
+            parts = [part.strip() for part in text.split(",")]
         else:
             parts = text.split()
         if len(parts) < 2:
@@ -47,15 +54,17 @@ class ExamSys:
             return None
 
         # 兼容课程附件表格格式：序号、姓名、性别、班级、学号、学院。
-        if len(parts) >= 5 and parts[0].strip().isdigit() and parts[4].strip().isdigit():
-            return Student(parts[4].strip(), parts[1].strip())
+        if len(parts) >= 5 and parts[0].isdigit() and parts[4].isdigit() and parts[1]:
+            return Student(parts[4], parts[1])
 
         # 兼容“学号 姓名”和“姓名 学号”两种简化写法。
-        first = parts[0].strip()
-        second = parts[1].strip()
-        if first.isdigit():
+        first = parts[0]
+        second = parts[1]
+        if first.isdigit() and second:
             return Student(first, second)
-        return Student(second, first)
+        if second.isdigit() and first:
+            return Student(second, first)
+        return None
 
     def run(self):
         """显示菜单并根据用户输入调用对应功能。"""
@@ -85,7 +94,15 @@ class ExamSys:
 
     def find_student(self):
         """根据输入学号查询学生。"""
+        if not self.students:
+            print("当前没有可查询的学生数据，请先检查学生名单文件。")
+            return
+
         student_id = input("请输入要查询的学号：").strip()
+        if not student_id:
+            print("学号不能为空，请重新输入。")
+            return
+
         for student in self.students:
             # 逐个比较学号，找到后直接 return，避免后面又打印“未找到”。
             if student.student_id == student_id:
@@ -95,6 +112,10 @@ class ExamSys:
 
     def random_roll_call(self):
         """随机抽取不重复学生名单。"""
+        if not self.students:
+            print("当前没有可点名的学生数据，请先检查学生名单文件。")
+            return
+
         try:
             count_text = input("请输入需要点名的学生数量：").strip()
             # int 转换失败、人数不合理，都会交给下面的 except 统一提示。
@@ -116,6 +137,10 @@ class ExamSys:
 
     def generate_exam_arrangement(self):
         """随机打乱学生顺序并生成考场安排表。"""
+        if not self.students:
+            print("当前没有学生数据，无法生成考场安排表。")
+            return
+
         # 先复制一份列表再打乱，不改变原始学生名单顺序。
         self.exam_arrangement = self.students[:]
         random.shuffle(self.exam_arrangement)
@@ -134,6 +159,10 @@ class ExamSys:
 
     def generate_admission_tickets(self):
         """根据考场安排为每名学生生成独立准考证文件。"""
+        if not self.students:
+            print("当前没有学生数据，无法生成准考证文件。")
+            return
+
         # 如果用户没有先生成考场安排，这里尝试读取旧文件或自动生成一份。
         if not self.exam_arrangement:
             arrangement_path = os.path.join(self.base_dir, "考场安排表.txt")
@@ -141,6 +170,9 @@ class ExamSys:
                 self._load_arrangement_file(arrangement_path)
             else:
                 self.generate_exam_arrangement()
+        if not self.exam_arrangement:
+            print("没有可用的考场安排信息，准考证文件未生成。")
+            return
 
         ticket_dir = os.path.join(self.base_dir, "准考证")
         try:
@@ -177,8 +209,11 @@ class ExamSys:
             with open(arrangement_path, "r", encoding="utf-8") as file:
                 for line in file:
                     parts = line.strip().split(",")
-                    if len(parts) >= 3:
-                        self.exam_arrangement.append(Student(parts[2], parts[1]))
+                    if len(parts) >= 3 and parts[0].strip().isdigit() and parts[2].strip().isdigit():
+                        self.exam_arrangement.append(Student(parts[2].strip(), parts[1].strip()))
+            if not self.exam_arrangement:
+                print("已有考场安排表内容无效，将重新生成安排表。")
+                self.generate_exam_arrangement()
         except OSError:
             print("读取已有考场安排表失败，将重新生成安排表。")
             self.generate_exam_arrangement()
