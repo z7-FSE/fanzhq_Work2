@@ -42,7 +42,15 @@ class ExamSys:
         if len(parts) < 2:
             return None
 
-        # 兼容“学号 姓名”和“姓名 学号”两种常见写法。
+        # 新名单是“序号 姓名 性别 班级 学号 学院”的表格，表头需要跳过。
+        if parts[0].strip() == "序号":
+            return None
+
+        # 兼容课程附件表格格式：序号、姓名、性别、班级、学号、学院。
+        if len(parts) >= 5 and parts[0].strip().isdigit() and parts[4].strip().isdigit():
+            return Student(parts[4].strip(), parts[1].strip())
+
+        # 兼容“学号 姓名”和“姓名 学号”两种简化写法。
         first = parts[0].strip()
         second = parts[1].strip()
         if first.isdigit():
